@@ -28,9 +28,18 @@ const App = () =>{
   const toggleImportanceOf = (id) => {
     const noteForServer = note.find(n=>n.id === id);
     const changeNote = {...noteForServer, important: !noteForServer.important}
-    noteService.Update(id,changeNote).then(UpdateNote => {
-      setNote(note.map(noteForServerSet => noteForServerSet.id !== id ? noteForServerSet : UpdateNote))
-    })
+
+    noteService
+      .Update(id,changeNote)
+      .then(UpdateNote => {
+        setNote(note.map(noteForServerSet => noteForServerSet.id !== id ? noteForServerSet : UpdateNote))
+      })
+      .catch(error => {
+        alert(`the note ${changeNote.contenido} was already deleted from server`
+
+        )
+        setNote(notes.filter(n => n.id !== id))
+      })
   };
   const notesToShow = showAll ? note : note.filter(note => note.important)
 

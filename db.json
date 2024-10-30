@@ -3,7 +3,7 @@
     {
       "id": "1",
       "content": "HTML is not Easy",
-      "important": true
+      "important": false
     },
     {
       "id": "2",
@@ -18,7 +18,7 @@
     {
       "id": "6a84",
       "content": "La casa de Guadalupe",
-      "important": false
+      "important": true
     },
     {
       "id": "7049",

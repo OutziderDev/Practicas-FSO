@@ -7,7 +7,7 @@ const getAll = () =>{
     return request.then(Response => Response.data)
 }
 
-const Create = newObject =>{ 
+const create = newObject =>{ 
     const request = axios.post(baseUrl,newObject)
     return request.then(Response => Response.data)
 }
@@ -17,8 +17,4 @@ const Update = (id,newObject) => {
     return request.then(Response => Response.data)
 }
 
-export default {
-    getAll : getAll,
-    create : Create,
-    Update : Update
-}
+export default {getAll, create , Update}
