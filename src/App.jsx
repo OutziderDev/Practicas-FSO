@@ -1,41 +1,37 @@
 import { useState,useEffect } from 'react';
 import Note from './Components/Note';
-import axios from 'axios';
-
+import noteService from './Services/node.js'
 
 const App = () =>{
-
+  // useStates and Effect
   const [note,setNote] = useState([]);
   const [newNote,setNewNote] = useState('');
   const [showAll,setShowAll] = useState(true);
+  //console.log(noteService.getAll);  
+  useEffect(() => {noteService.getAll().then(intialNote => setNote(intialNote))},[])
 
-  const hook = ()=>{
-    //console.log('hola effect');
-    axios
-    .get('http://localhost:3001/notes')
-    .then(Response=>{
-      //console.log('promise fulfilled');
-      setNote(Response.data)
-    });
-  }
-
-  useEffect(hook,[])
-
-  //console.log('render',note.length,'note');
-  
-  
+  //Funciones de utilidades
   const addNote = (event) =>{
     event.preventDefault();
-    const forArchivateNote = {
-      id:note.length+1,
+    const noteObject = {
       content:newNote,
       important: Math.random()<0.5,
     }
-    setNote(note.concat(forArchivateNote));
-    setNewNote('') 
-  }
-  const onChangeHandler = (event) => setNewNote(event.target.value)
+    noteService.create(noteObject).then(createNote=>{
+      setNote(note.concat(createNote)); 
+      setNewNote('') 
+    })
   
+  }
+  const onChangeHandler = (event) => setNewNote(event.target.value);
+
+  const toggleImportanceOf = (id) => {
+    const noteForServer = note.find(n=>n.id === id);
+    const changeNote = {...noteForServer, important: !noteForServer.important}
+    noteService.Update(id,changeNote).then(UpdateNote => {
+      setNote(note.map(noteForServerSet => noteForServerSet.id !== id ? noteForServerSet : UpdateNote))
+    })
+  };
   const notesToShow = showAll ? note : note.filter(note => note.important)
 
   return(
@@ -43,7 +39,7 @@ const App = () =>{
       <h1>Notas:</h1>
       <ul>
         {notesToShow.map((notex) => 
-            <Note key={notex.id} contenido={notex.content}/>
+            <Note key={notex.id} contenido={notex} toggleImportance={()=>toggleImportanceOf(notex.id)}/>
           )
         }        
       </ul>

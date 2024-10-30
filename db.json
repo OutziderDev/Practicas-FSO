@@ -1,20 +1,44 @@
 {
-    "notes": [
-        {
-            "id": 1,
-            "content": "HTML is not Easy",
-            "important": true
-        },
-        {
-            "id":2,
-            "content": "El navegador puede ejecutar solo JavaScript",
-            "important": false
-        },
-        {
-            "id":3,
-            "content":"El metodo GET y POST son los mas importantes del protocolo HTTP.",
-            "important": true
-        }
-      
-    ]
+  "notes": [
+    {
+      "id": "1",
+      "content": "HTML is not Easy",
+      "important": true
+    },
+    {
+      "id": "2",
+      "content": "El navegador puede ejecutar solo JavaScript",
+      "important": false
+    },
+    {
+      "id": "3",
+      "content": "El metodo GET y POST son los mas importantes del protocolo HTTP.",
+      "important": false
+    },
+    {
+      "id": "6a84",
+      "content": "La casa de Guadalupe",
+      "important": false
+    },
+    {
+      "id": "7049",
+      "content": "Maria la de paco",
+      "important": false
+    },
+    {
+      "id": "41dc",
+      "content": "Pedro del rio",
+      "important": false
+    },
+    {
+      "id": "7cf1",
+      "content": "casa",
+      "important": true
+    },
+    {
+      "id": "fda9",
+      "content": "La pizza es vida",
+      "important": true
+    }
+  ]
 }
