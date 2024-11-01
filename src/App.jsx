@@ -1,13 +1,14 @@
 import { useState,useEffect } from 'react';
 import Note from './Components/Note';
 import noteService from './Services/node.js'
+import Notification from './Components/Notification.jsx'
 
 const App = () =>{
   // useStates and Effect
-  const [note,setNote] = useState([]);
+  const [note,setNote] = useState(null);
   const [newNote,setNewNote] = useState('');
   const [showAll,setShowAll] = useState(true);
-  //console.log(noteService.getAll);  
+  const [errorMesage, setErrorMesage] = useState(null);
   useEffect(() => {noteService.getAll().then(intialNote => setNote(intialNote))},[])
 
   //Funciones de utilidades
@@ -35,19 +36,23 @@ const App = () =>{
         setNote(note.map(noteForServerSet => noteForServerSet.id !== id ? noteForServerSet : UpdateNote))
       })
       .catch(error => {
-        alert(`the note ${changeNote.contenido} was already deleted from server`
-
-        )
+        setErrorMesage(`Note '${changeNote.contenido}' was already removed from server`)
+        setTimeout(() => {
+          setErrorMesage(null)
+        }, 5000);
         setNote(notes.filter(n => n.id !== id))
       })
   };
   const notesToShow = showAll ? note : note.filter(note => note.important)
-
+  if (!note) return
+  
   return(
     <>
       <h1>Notas:</h1>
+      <Notification message={errorMesage}/>
       <ul>
-        {notesToShow.map((notex) => 
+        {
+          notesToShow.map((notex) => 
             <Note key={notex.id} contenido={notex} toggleImportance={()=>toggleImportanceOf(notex.id)}/>
           )
         }        
