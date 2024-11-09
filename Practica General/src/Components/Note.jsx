@@ -1,5 +1,5 @@
 const Note = ({contenido, toggleImportance}) =>{
-  const label = contenido.important ? 'make no importat' : 'make a importat';
+  const label = contenido.important ? 'make no importat' : 'make importat';
   
     return (
       <li className="note">{contenido.content } - <button onClick={toggleImportance}>{label}</button></li>
