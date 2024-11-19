@@ -22,8 +22,8 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model('Note', noteSchema)
 
 const note = new Note({
-  content: 'El navegador puede ejecutar solo JavaScript',
-  important: true,
+  content: 'La pizza es vida',
+  important: false,
 })
 
 /* note.save().then(result => {
