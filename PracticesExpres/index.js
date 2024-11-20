@@ -47,13 +47,10 @@ let notes = [
  })
 
  app.get(`/api/note/:id`,(req,res)=>{
-    const id = Number(req.params.id);
-    const note = notes.find(note =>  note.id === id)
-    if (note) {
-        res.json(note)
-    }else{
-        res.status(404).json({error:'no encontrada'})
-    }
+    const id = req.params.id;
+    Note.findById(id).then(findNote => {
+      res.json(findNote)
+    })
  })
 
  app.use(express.json())
@@ -67,18 +64,19 @@ let notes = [
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
-    return response.status(404).json({
-      error : "falto el contenido de la nota"
-    })
+  if (body.content === undefined) {
+    return response.status(404).json({  error : "falto el contenido de la nota"    })
   }
-  const note = {
-    id: generateId(),
-    content: body.content,
-    importat: Boolean(body.important) || false
-  }
-  notes = notes.concat(note);
-  response.json(note);
+
+  const note = new Note({
+    content:body.content,
+    important: Boolean(body.important) || false
+  })
+
+  note.save().then(saveNote =>{
+    response.json(saveNote)
+  })
+  
 })
 
 //Funciones de apoyo
