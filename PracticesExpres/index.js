@@ -1,65 +1,40 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
-const cors = require('cors');
+require('dotenv').config();
+
 const Note = require('./models/note');
-app.use(cors());
+
 app.use(express.static('dist'));
-const PORT = process.env.PORT
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
 
-let notes = [
-  {
-    id: 1,
-    content: "HTML is not Easy",
-    important: false
-  },
-  {
-    id: 2,
-    content: "El navegador puede ejecutar solo JavaScript",
-    important: false
-  },
-  {
-    id: 3,
-    content: "El metodo GET y POST son los mas importantes del protocolo HTTP.",
-    important: false
-  },
-  {
-    id: 4,
-    content: "Maria la de paco",
-    important: false
-  },
-  {
-    id: 5,
-    content: "La pizza es vida",
-    important: true
-  }
-]
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json())
+const PORT = process.env.PORT // Puerto 
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
   
- app.get('/',(req,res)=>{
-    res.send(`<h1>Hello Words!: ${notes[0].content}</h1>`)
- })
+app.get('/',(req,res)=>{
+    res.send(`<h1>Hello Words!: </h1>`)
+})
 
- app.get('/api/notes',(req,res)=>{
-    Note.find({}).then(notes => {
-      res.json(notes)
-    })
- })
-
- app.get(`/api/note/:id`,(req,res)=>{
-    const id = req.params.id;
-    Note.findById(id).then(findNote => {
-      res.json(findNote)
-    })
- })
-
- app.use(express.json())
- app.delete(`/api/notes/:id`,(req,res)=>{
-    const id = Number(req.params.id)
-    notes = notes.filter(note => note.id !== id)
-
-    res.status(204).end()
- })
+app.get('/api/notes',(req,res)=>{
+  Note.find({}).then(notes => {
+    res.json(notes)
+  })
+})
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
@@ -79,14 +54,45 @@ app.post('/api/notes', (request, response) => {
   
 })
 
-//Funciones de apoyo
-const generateId = () =>{
-  const MaxID = notes.length >0 ? Math.max(...notes.map(max => max.id)) : 0
-  return MaxID + 1
-}
+app.get(`/api/notes/:id`,(req,res,next)=>{
+  Note.findById(req.params.id)
+  .then(findNote => {
+    if (findNote) {
+      res.json(findNote)
+    }else{
+      res.status(404).end()
+    }
+  })
+  .catch(error => next(error))
+})
+
+app.delete(`/api/notes/:id`,(req,res,next)=>{
+  Note.findByIdAndDelete(req.params.id).
+  then(result => {
+    res.status(204).end()
+  })
+  .catch(error => next(error))
+})
+
+app.put('/api/notes/:id', (request, response, next) => {
+  const body = request.body
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
+})
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT} --`);
-    console.log('For exit of Server press CTRL + C');
-    
+    console.log('For exit of Server press CTRL + C');  
 });
