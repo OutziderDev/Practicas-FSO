@@ -1,10 +1,10 @@
-const express = require('express');
-const app = express();
-require('dotenv').config();
+const express = require('express')
+const app = express()
+require('dotenv').config()
 
-const Note = require('./models/note');
+const Note = require('./models/note')
 
-app.use(express.static('dist'));
+app.use(express.static('dist'))
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
@@ -12,27 +12,27 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError'){
-    return response.status(400).json({error:error.message})
+    return response.status(400).json({ error:error.message })
   }
 
   next(error)
 }
 
-const cors = require('cors');
+const cors = require('cors')
 
-app.use(cors());
+app.use(cors())
 app.use(express.json())
-const PORT = process.env.PORT // Puerto 
+const PORT = process.env.PORT // Puerto
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-  
-app.get('/',(req,res)=>{
-    res.send(`<h1>Hello Words!: </h1>`)
+
+app.get('/',(req,res) => {
+  res.send('<h1>Hello Words!: </h1>')
 })
 
-app.get('/api/notes',(req,res)=>{
+app.get('/api/notes',(req,res) => {
   Note.find({}).then(notes => {
     res.json(notes)
   })
@@ -42,7 +42,7 @@ app.post('/api/notes', (request, response,next) => {
   const body = request.body
 
   if (body.content === undefined) {
-    return response.status(404).json({  error : "falto el contenido de la nota"    })
+    return response.status(404).json({  error : 'falto el contenido de la nota' })
   }
 
   const note = new Note({
@@ -51,37 +51,36 @@ app.post('/api/notes', (request, response,next) => {
   })
 
   note.save()
-  .then(saveNote =>{
-    response.json(saveNote)
-  })
-  .catch(error => next(error))
-  
+    .then(saveNote => {
+      response.json(saveNote)
+    })
+    .catch(error => next(error))
 })
 
-app.get(`/api/notes/:id`,(req,res,next)=>{
+app.get('/api/notes/:id',(req,res,next) => {
   Note.findById(req.params.id)
-  .then(findNote => {
-    if (findNote) {
-      res.json(findNote)
-    }else{
-      res.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+    .then(findNote => {
+      if (findNote) {
+        res.json(findNote)
+      }else{
+        res.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
-app.delete(`/api/notes/:id`,(req,res,next)=>{
+app.delete('/api/notes/:id',(req,res,next) => {
   Note.findByIdAndDelete(req.params.id).
-  then(() => {
-    res.status(204).end()
-  })
-  .catch(error => next(error))
+    then(() => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
-  const {content,important} = request.body
+  const { content,important } = request.body
 
-  Note.findByIdAndUpdate(request.params.id, {content,important}, { new: true,runValidators:true,context:'query' })
+  Note.findByIdAndUpdate(request.params.id, { content,important }, { new: true,runValidators:true,context:'query' })
     .then(updatedNote => {
       response.json(updatedNote)
     })
@@ -91,7 +90,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT} --`);
-    console.log('For exit of Server press CTRL + C');  
-});
+app.listen(PORT,() => {
+  console.log(`Server running on port ${PORT} --`)
+  console.log('For exit of Server press CTRL + C')
+})
