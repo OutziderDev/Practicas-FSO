@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-require('dotenv').config()
+const config = require('./utils/config')
+const logger = require('./utils/logger')
 
 const Note = require('./models/note')
 
@@ -22,7 +23,6 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
-const PORT = process.env.PORT // Puerto
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -90,7 +90,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-app.listen(PORT,() => {
-  console.log(`Server running on port ${PORT} --`)
-  console.log('For exit of Server press CTRL + C')
+app.listen(config.PORT,() => {
+  logger.info(`Server running on port ${config.PORT} --`)
+  logger.info('For exit of Server press CTRL + C')
 })
