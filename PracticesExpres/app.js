@@ -1,15 +1,18 @@
-const config = require('./utils/config')
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')
-const middleware = require('./utils/middleware')
+const config = require('./utils/config')
 const logger = require('./utils/logger')
+const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 
+app.use(cors())
+app.use(express.static('dist'))
+app.use(express.json())
+//app.use(middleware.requestLogger)
+//Connecting to BD
 mongoose.set('strictQuery',false)
-//logger.info('connecting to', config.MONGODB_URI)
-
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
     logger.info('Connected to MongoDB')
@@ -17,14 +20,12 @@ mongoose.connect(config.MONGODB_URI)
     logger.error('error connecting to MongoDB',err)
   })
 
-app.use(cors())
-app.use(express.static('dist'))
-app.use(express.json)
-app.use(middleware.requestLogger)
+//app.use(middleware.unknownEndpoint)
 
 app.use('/api/notes',notesRouter)
-
+//console.log('ya paso la llamada de ruta')
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+
 
 module.exports = app
