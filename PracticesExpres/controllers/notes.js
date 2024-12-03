@@ -1,7 +1,7 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
-notesRouter.get('/',(request,response,next) => {
+notesRouter.get('/',(request,response) => {
   //console.log('Esta en la llamada')
   Note.find({})
     .then((notes) => {
