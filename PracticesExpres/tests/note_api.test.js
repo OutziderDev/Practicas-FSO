@@ -21,8 +21,10 @@ describe('Supertest', () => {
 
   beforeEach(async () => {
     await Note.deleteMany({})
+
     let noteObject = new Note(initialNotes[0])
     await noteObject.save()
+
     noteObject = new Note (initialNotes[1])
     await noteObject.save()
   })
@@ -33,10 +35,6 @@ describe('Supertest', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
-  after(async () => {
-    await mongoose.connection.close()
-  })
-
 
   test('there are two notes', async () => {
     const response = await api.get('/api/notes')
@@ -50,4 +48,9 @@ describe('Supertest', () => {
     const contents = response.body.map(e => e.content)
     assert(contents.includes('HTML is easy'))
   })
+
+  after(async () => {
+    await mongoose.connection.close()
+  })
+
 })
