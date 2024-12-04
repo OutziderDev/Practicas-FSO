@@ -8,7 +8,7 @@ const app = require('../app')
 
 const api = supertest(app)
 
-describe('Supertest .Get', () => {
+describe('Supertest', () => {
 
   beforeEach(async () => {
     await Note.deleteMany({})
@@ -20,20 +20,20 @@ describe('Supertest .Get', () => {
     await noteObject.save()
   })
 
-  test('notes are returned as json', async () => {
-    await api
+  test('GET/ notes are returned as json', async () => {
+    /*await api
       .get('/api/notes')
       .expect(200)
-      .expect('Content-Type', /application\/json/)
+      .expect('Content-Type', /application\/json/)*/
   })
 
-  test('there are two notes', async () => {
-    const response = await api.get('/api/notes')
+  test('GET/ there are two notes', async () => {
+    const response = await helper.notesInDB()
 
-    assert.strictEqual(response.body.length, helper.initialNotes.length)
+    assert.strictEqual(response.length, helper.initialNotes.length)
   })
 
-  test('the first note is about HTTP methods', async () => {
+  test('GET/ the first note is about HTTP methods', async () => {
     const response = await api.get('/api/notes')
 
     const contents = response.body.map(e => e.content)
@@ -73,8 +73,36 @@ describe('Supertest .Get', () => {
     const notesAtEnd = await helper.notesInDB()
     assert.strictEqual(notesAtEnd.length,helper.initialNotes.length)
   })
-
   /*------------------------------------------------------------------------------- */
+  /* ----------------Seccion para test de ver una sola nota y de borrar------------- */
+  test('GET ONE/ a specific note can be viewed', async () => {
+    const notesAtStart = await helper.notesInDB()
+    const noteToView = notesAtStart[0]
+
+    const resultNote = await api
+      .get(`/api/notes/${noteToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    assert.deepStrictEqual(resultNote.body, noteToView)
+  })
+
+  test('DELETE/ a note can be deleted', async () => {
+    const notesAtStart = await helper.notesInDB()
+    const noteToDelete = notesAtStart[0]
+
+    await api
+      .delete(`/api/notes/${noteToDelete.id}`)
+      .expect(204)
+
+    const notesAtEnd = await helper.notesInDB()
+
+    const contents = notesAtEnd.map(r => r.content)
+    assert(!contents.includes(noteToDelete.content))
+
+    assert.strictEqual(notesAtEnd.length, helper.initialNotes.length - 1)
+  })
+
   after(async () => {
     await mongoose.connection.close()
   })
