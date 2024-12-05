@@ -12,19 +12,18 @@ describe('Supertest', () => {
 
   beforeEach(async () => {
     await Note.deleteMany({})
-
-    let noteObject = new Note(helper.initialNotes[0])
-    await noteObject.save()
-
-    noteObject = new Note (helper.initialNotes[1])
-    await noteObject.save()
+    console.log('Cleared')
+    const noteObject = helper.initialNotes.map(note => new Note(note))
+    const promiseArray = noteObject.map(note => note.save())
+    await Promise.all(promiseArray)
+    console.log('done')
   })
 
   test('GET/ notes are returned as json', async () => {
-    /*await api
+    await api
       .get('/api/notes')
       .expect(200)
-      .expect('Content-Type', /application\/json/)*/
+      .expect('Content-Type', /application\/json/)
   })
 
   test('GET/ there are two notes', async () => {
