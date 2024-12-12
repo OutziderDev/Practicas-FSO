@@ -7,11 +7,13 @@ const api = supertest(app)
 
 const helper = require('./test_helper')
 const Note = require('../models/note')
+//const User = require('../models/userModel')
 
 describe('Supertest', () => {
 
   beforeEach(async () => {
     await Note.deleteMany({})
+    //await User.deleteMany({})
     //console.log('Cleared')
     const noteObject = helper.initialNotes.map(note => new Note(note))
     const promiseArray = noteObject.map(note => note.save())
@@ -60,7 +62,8 @@ describe('Supertest', () => {
     test('POST/ a valid note can be added', async () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
-        important: true
+        important: true,
+        user: '675a5311f2ea19837ab222bd'
       }
 
       await api
