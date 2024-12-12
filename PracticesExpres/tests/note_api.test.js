@@ -14,11 +14,9 @@ describe('Supertest', () => {
   beforeEach(async () => {
     await Note.deleteMany({})
     //await User.deleteMany({})
-    //console.log('Cleared')
     const noteObject = helper.initialNotes.map(note => new Note(note))
     const promiseArray = noteObject.map(note => note.save())
     await Promise.all(promiseArray)
-    //console.log('done')
   })
 
   describe('for GETs',  () => {
@@ -110,9 +108,9 @@ describe('Supertest', () => {
       assert(!contents.includes(noteToDelete.content))
 
     })
+  })
 
-    after(async () => {
-      await mongoose.connection.close()
-    })
+  after(async () => {
+    await mongoose.connection.close()
   })
 })

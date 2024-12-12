@@ -20,10 +20,13 @@ notesRouter.get('/:id', async (request, response) => {
 
 notesRouter.post( '/', async (request,response) => {
   const body = request.body
-  console.log(body, ' y el dato es:', body.user)
+  //log(body)
+  if (!body.user || !body.content) {
+    response.status(404).json({ error:'missing user or content note' })
+  }
 
   const user = await User.findById(body.user)
-  console.log('Los datos de Usuario',user)
+  //console.log('Los datos de Usuario',user)
 
   const note = new Note({
     content: body.content,

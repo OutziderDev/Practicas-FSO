@@ -13,7 +13,7 @@ const initialNotes = [
 
 const initialUser = [
   {
-    username: 'user1',
+    username: 'admin',
     name: 'admin',
     passwordHash: '123'
   }
