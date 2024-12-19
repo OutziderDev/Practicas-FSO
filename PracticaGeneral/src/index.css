@@ -1,5 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 h1{
-    color: green;
+    color: #3998b5;
+    text-align: center;
+    font-size: 6em;
 }
 
 .note{
@@ -18,4 +25,112 @@ h1{
     border: 1px dashed;
     border-color: red;
     color: red;
+}
+
+#container{ 
+    height: 100dvh;
+    width: 100dvw;
+    background: linear-gradient(45deg, #000,#0D2026 75%);
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+
+    h3{
+        text-align: center;
+        font-size: 2em;
+        margin: 5px;
+        padding: 5px;
+        color: #fff;
+    }
+
+    section{ 
+        padding: 5px;
+        margin: 5px;
+    }
+
+    #form-login{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        color: #fff;
+        margin: 5% 10%;
+        padding: 3%;
+        box-shadow: 0px 1px 50px 10px rgba(255, 255, 255, 0.581);
+
+        label{
+            font-size: 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+        input{
+            padding: 1%;
+            font-size: 1rem;
+            border-radius: 10px;
+            flex: 2;
+            width: 100%;
+        }
+    }
+
+    li{
+        color: #FFF;
+        font-size: 1.2rem;
+
+        button{
+            padding: 3px;
+            border-radius: 5px;
+        }
+    }
+
+    #form-save{
+        margin: 5% 5%;
+
+        display: flex;
+        gap: 1px;
+
+        input{
+            flex: 3;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 1rem;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        button{
+            flex: 1;
+            display: inline-block;
+            font-size: 1rem;   
+            padding: 6px;
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #ffffff36;
+            cursor: pointer;
+        }
+    }
+
+    #btn{
+        text-align: center;
+        display: inline-block;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+        font-size: larger;
+        border-radius: 10px;
+        background-color: #3b9ebc;
+        color: #fff;
+    }
+    #btn:hover{
+        background-color: #45bce1;
+        cursor: pointer;
+    }
+    
 }
