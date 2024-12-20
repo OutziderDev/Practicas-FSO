@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react';
 import Note from './Components/Note';
 import noteService from './Services/node.js'
+import loginService from './Services/login.js'
 import Notification from './Components/Notification.jsx'
 
 const App = () =>{
@@ -8,6 +9,9 @@ const App = () =>{
   const [note,setNote] = useState(null);
   const [newNote,setNewNote] = useState('');
   const [showAll,setShowAll] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null);
   const [errorMesage, setErrorMesage] = useState(null);
   useEffect(() => {noteService.getAll().then(intialNote => setNote(intialNote))},[])
 
@@ -43,6 +47,24 @@ const App = () =>{
         setNote(note.filter(n => n.id !== id)) //verificar por que tenia notes.filter
       })
   };
+
+  const handleLogin = (event) => {
+    event.preventDefault()
+    console.log('Login in with; ', username, password);
+
+    try {
+      const user = loginService.login({username,password})
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (error) {
+      setErrorMesage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMesage(null)
+      }, 5000);
+    }
+  }
+
   const notesToShow = showAll ? note : note.filter(note => note.important)
   if (!note) return
   
@@ -54,12 +76,15 @@ const App = () =>{
         <div className='grid'>
           <section> {/* Contenedor para Login */}
             <h3>Login</h3>
-            <form id='form-login'>
+
+            <form id='form-login' onSubmit={handleLogin}>
               <label>Usuario:</label>
-              <input type='text' id='user' name='user' placeholder='pepe'/>
-              <br/>
+              <input type='text' value={username} name='Username' onChange={({ target }) => setUsername(target.value)} placeholder='username'/> 
+
               <label>Contraseña:</label>
-              <input type='password' id='pass' name='pass' placeholder='pass456'/>
+              <input type='password' value={password} name='Password' onChange={({ target }) => setPassword(target.value)} placeholder='password'/>
+
+              <button type="submit">login</button>
             </form> 
           </section>
 
