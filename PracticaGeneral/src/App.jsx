@@ -1,8 +1,9 @@
 import { useState,useEffect } from 'react';
+import Notification from './Components/Notification.jsx'
 import Note from './Components/Note';
+
 import noteService from './Services/node.js'
 import loginService from './Services/login.js'
-import Notification from './Components/Notification.jsx'
 
 const App = () =>{
   // useStates and Effect
@@ -13,20 +14,42 @@ const App = () =>{
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [errorMesage, setErrorMesage] = useState(null);
-  useEffect(() => {noteService.getAll().then(intialNote => setNote(intialNote))},[])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
+  useEffect(() => {
+    /* noteService
+      .getAll()
+      .then(intialNote =>
+         setNote(intialNote)
+      ) */
+     const fetchNotes = async () => {
+       const initialNote = await noteService.getAll()
+       setNote(initialNote)
+     }
+     fetchNotes()
+    },[])
 
   //Funciones de utilidades
-  const addNote = (event) =>{
-    event.preventDefault();
+  const addNote =  (event) =>{
+    event.preventDefault()
     const noteObject = {
       content:newNote,
       important: Math.random()<0.5,
     }
-    noteService.create(noteObject).then(createNote=>{
-      setNote(note.concat(createNote)); 
-      setNewNote('') 
-    })
-  
+    noteService
+      .create(noteObject)
+      .then(createNote=>{
+        setNote(note.concat(createNote)); 
+        setNewNote('') 
+      })
   }
   const onChangeHandler = (event) => setNewNote(event.target.value);
 
@@ -46,17 +69,19 @@ const App = () =>{
         }, 5000);
         setNote(note.filter(n => n.id !== id)) //verificar por que tenia notes.filter
       })
-  };
+  }
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('Login in with; ', username, password);
 
     try {
-      const user = loginService.login({username,password})
+      const user = await loginService.login({username,password})
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
       noteService.setToken(user.token)
       setUser(user)
-      console.log('user',user.data.token)
+      console.log('user',user.token)
       setUsername('')
       setPassword('')
     } catch (error) {
