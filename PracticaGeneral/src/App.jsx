@@ -60,12 +60,44 @@ const App = () =>{
     } catch (error) {
       setErrorMesage('Wrong credentials')
       setTimeout(() => {
-        setErrorMesage(null)
-      }, 5000);
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   const notesToShow = showAll ? note : note.filter(note => note.important)
+
+  const loginForm = () => (
+  <>  
+    <h3>Login</h3>
+    <form id='form-login' onSubmit={handleLogin}>
+      <label>Usuario:</label>
+      <input type='text' value={username} name='Username' onChange={({ target }) => setUsername(target.value)} placeholder='username'/> 
+
+      <label>Contraseña:</label>
+      <input type='password' value={password} name='Password' onChange={({ target }) => setPassword(target.value)} placeholder='password'/>
+
+      <button type="submit">login</button>
+    </form> 
+    </>  
+  )
+
+  const noteForm = () => (
+    <>
+    <h3>Add Nota:</h3>
+    <form onSubmit={addNote} id='form-save'>
+      <input type="text"
+            id='text'
+            value={newNote}
+            placeholder='Write your Note: Html is easy'
+            onChange={onChangeHandler}
+      />
+    
+      <button style={{marginTop:'5px'}} type='submit' id='but'>guardar</button>
+    </form>
+    </>
+  )
+
   if (!note) return
   
   return(
@@ -75,17 +107,10 @@ const App = () =>{
         <Notification message={errorMesage}/>
         <div className='grid'>
           <section> {/* Contenedor para Login */}
-            <h3>Login</h3>
-
-            <form id='form-login' onSubmit={handleLogin}>
-              <label>Usuario:</label>
-              <input type='text' value={username} name='Username' onChange={({ target }) => setUsername(target.value)} placeholder='username'/> 
-
-              <label>Contraseña:</label>
-              <input type='password' value={password} name='Password' onChange={({ target }) => setPassword(target.value)} placeholder='password'/>
-
-              <button type="submit">login</button>
-            </form> 
+          {user === null ?
+            loginForm() :
+            noteForm()
+          }
           </section>
 
           <section> {/*Contenedor para Notas */}
@@ -97,18 +122,6 @@ const App = () =>{
                 )
               }        
             </ul>
-
-            <form onSubmit={addNote} id='form-save'>
-              <input type="text"
-                    id='text'
-                    value={newNote}
-                    placeholder='Write your Note: Html is easy'
-                    onChange={onChangeHandler}
-              />
-              <br />
-              <button style={{marginTop:'5px'}} type='submit' id='but'>guardar</button>
-            </form>
-
             
             <button id='btn' onClick={()=>setShowAll(!showAll)}>
               Ver {showAll ? 'importantes' : 'todas'}
