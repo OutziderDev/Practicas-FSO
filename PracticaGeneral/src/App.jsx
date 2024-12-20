@@ -54,17 +54,19 @@ const App = () =>{
 
     try {
       const user = loginService.login({username,password})
+      noteService.setToken(user.token)
       setUser(user)
+      console.log('user',user.data.token)
       setUsername('')
       setPassword('')
     } catch (error) {
       setErrorMesage('Wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
+        setErrorMessage(null);
       }, 5000)
     }
   }
-
+  
   const notesToShow = showAll ? note : note.filter(note => note.important)
 
   const loginForm = () => (
