@@ -14,10 +14,10 @@ const getAll = async () =>{
 
 const create = async newObject => {
     const config = {
-      headers: { Authorization: token },
+      headers: { Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('loggedNoteappUser')).token}` },
     }
-
     const response = await axios.post(baseUrl,newObject,config)
+    //console.log('response',response )
     return response.data
 }
 

@@ -27,33 +27,46 @@ const getTokenFrom = request => {
   return null
 }
 
-notesRouter.post( '/', async (request,response) => {
-  const body = request.body
-  //log(body)
+notesRouter.post('/', async (request, response) => {
 
-  const decodedToken = jwt.verify(getTokenFrom(request),process.env.SECRET)
-  if (!decodedToken) {
-    return response.status(401).json({ error:'Token invalid' })
+  const { body } = request
+  // Verifica el token
+  const token = getTokenFrom(request)
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'Token missing or invalid' })
   }
 
-  if (!body.user || !body.content) {
-    response.status(404).json({ error:'missing user or content note' })
+  // Verifica los campos requeridos en el body
+  if (!body.content) {
+    return response.status(400).json({ error: 'Content is missing' })
   }
 
-  const user = await User.findById(body.user)
-  //console.log('Los datos de Usuario',user)
-
+  // Busca al usuario correspondiente
+  const user = await User.findById(decodedToken.id)
+  if (!user) {
+    return response.status(404).json({ error: 'User not found' })
+  }
+  //console.log('user', user)
+  // Crea una nueva instancia del modelo Note
   const note = new Note({
     content: body.content,
     important: body.important || false,
-    user: user.id
+    user: user._id, // Relaciona la nota con el usuario
   })
-
+  //console.log('note', note)
+  // Guarda la nota en la base de datos
   const savedNote = await note.save()
+  //console.log('Saved Note:', savedNote)
+
+  // Actualiza la lista de notas del usuario
   user.notes = user.notes.concat(savedNote._id)
   await user.save()
 
+  // Devuelve la nota guardada al cliente
   response.status(201).json(savedNote)
+
 })
 
 notesRouter.delete('/:id', async (request,response) => {

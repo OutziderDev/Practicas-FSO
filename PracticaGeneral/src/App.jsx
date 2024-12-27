@@ -25,11 +25,6 @@ const App = () =>{
   }, [])
 
   useEffect(() => {
-    /* noteService
-      .getAll()
-      .then(intialNote =>
-         setNote(intialNote)
-      ) */
      const fetchNotes = async () => {
        const initialNote = await noteService.getAll()
        setNote(initialNote)
@@ -38,18 +33,21 @@ const App = () =>{
     },[])
 
   //Funciones de utilidades
-  const addNote =  (event) =>{
+  const addNote = async (event) =>{
     event.preventDefault()
-    const noteObject = {
-      content:newNote,
-      important: Math.random()<0.5,
+    try {
+      const noteObject = {
+        content:newNote,
+        important: Math.random()<0.5,
+      }
+      
+      const noteResponse = await noteService.create(noteObject)
+      //console.log('la resp',noteResponse);
+      setNote(note.concat(noteResponse))
+    } catch (error) {
+      
     }
-    noteService
-      .create(noteObject)
-      .then(createNote=>{
-        setNote(note.concat(createNote)); 
-        setNewNote('') 
-      })
+    
   }
   const onChangeHandler = (event) => setNewNote(event.target.value);
 
@@ -91,6 +89,10 @@ const App = () =>{
       }, 5000)
     }
   }
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
   
   const notesToShow = showAll ? note : note.filter(note => note.important)
 
@@ -122,6 +124,7 @@ const App = () =>{
     
       <button style={{marginTop:'5px'}} type='submit' id='but'>guardar</button>
     </form>
+    <button onClick={handleLogout} style={{padding:5  ,display:'flex', justifyContent:'center', alignContent:'center', backgroundColor:'red', color:'white'}}>LogOut</button>
     </>
   )
 
