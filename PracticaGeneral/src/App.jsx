@@ -1,9 +1,11 @@
 import { useState,useEffect } from 'react';
 import Notification from './Components/Notification.jsx'
+import LoginForm from './Components/LoginForm.jsx';
 import Note from './Components/Note';
 
 import noteService from './Services/node.js'
 import loginService from './Services/login.js'
+import Togglable from './Components/Toggable.jsx';
 
 const App = () =>{
   // useStates and Effect
@@ -14,6 +16,7 @@ const App = () =>{
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [errorMesage, setErrorMesage] = useState(null);
+  const [loginVisible,setLoginVisible] = useState(false)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -96,20 +99,30 @@ const App = () =>{
   
   const notesToShow = showAll ? note : note.filter(note => note.important)
 
-  const loginForm = () => (
-  <>  
-    <h3>Login</h3>
-    <form id='form-login' onSubmit={handleLogin}>
-      <label>Usuario:</label>
-      <input type='text' value={username} name='Username' onChange={({ target }) => setUsername(target.value)} placeholder='username'/> 
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
-      <label>Contraseña:</label>
-      <input type='password' value={password} name='Password' onChange={({ target }) => setPassword(target.value)} placeholder='password'/>
-
-      <button type="submit">login</button>
-    </form> 
-    </>  
-  )
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <Togglable buttonLabel='login'>
+            <LoginForm
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleSubmit={handleLogin}
+            />
+          </Togglable>  
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const noteForm = () => (
     <>
