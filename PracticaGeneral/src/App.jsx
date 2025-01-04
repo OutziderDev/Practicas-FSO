@@ -130,12 +130,13 @@ const App = () =>{
     <form onSubmit={addNote} id='form-save'>
       <input type="text"
             id='text'
+            data-testid='note'
             value={newNote}
             placeholder='Write your Note: Html is easy'
             onChange={onChangeHandler}
       />
     
-      <button style={{marginTop:'5px'}} type='submit' id='but'>guardar</button>
+      <button data-testid='guardar' style={{marginTop:'5px'}} type='submit' id='but'>guardar</button>
     </form>
     <button onClick={handleLogout} style={{padding:5  ,display:'flex', justifyContent:'center', alignContent:'center', backgroundColor:'red', color:'white'}}>LogOut</button>
     </>
