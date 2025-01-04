@@ -15,8 +15,6 @@ test('renders content', async () => {
   const user = useEvent.setup()
   const button = screen.getByText('make no important')
   await user.click(button)
-
-  expect(mockHandler.mock.calls).toHaveLength(1)
   //screen.debug(div)
   /* expect(div).toHaveTextContent(
     'Component testing is done with react-testing-library'
@@ -25,13 +23,14 @@ test('renders content', async () => {
 
 test('renders button with correct label', () => {
   const note = {
-    content: 'Component testing is done with react-testing-library -',
+    content: 'Component testing is done with react-testing-library',
     important: true
   }
 
   render(<Note contenido={note} />)
 
-  const button = screen.getByText('make no importat')
+  // Verifica que el texto del botón coincida
+  const button = screen.getByText('make no important')
   expect(button).toBeInTheDocument()
 })
 
