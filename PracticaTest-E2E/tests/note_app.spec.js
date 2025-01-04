@@ -31,7 +31,7 @@ describe('Note app', () => {
 
     const title = page.getByText('Add Nota:')
     await expect(title).toBeVisible()
-  })*/
+  })
 
   describe('when logged in', () => { 
 
@@ -51,14 +51,31 @@ describe('Note app', () => {
       await page.getByRole('button', { name: 'make no important' }).click()
       await expect(page.getByText('make important')).toBeVisible()
     })
+  })*/
 
-  
-  
-    /*test('importance can be changed', async ({ page }) => {
-      await page.getByRole('button', { name: 'make no important' }).click()
-      await expect(page.getByText('make important')).toBeVisible()
-    })*/
-    
+  describe('login fail', () => { 
+
+    test('login fails', async ({page}) => { 
+
+      
+      await page.getByRole('button', { name: 'log in' }).click()
+      await page.getByRole('button', { name: 'log in' }).click()
+      await page.getByTestId('username').fill('admin')
+      await page.getByTestId('password').fill('1231')
+      await page.getByRole('button', {name: 'login'}).click()
+
+      const errorDiv = await page.locator('.notification')
+      await expect(errorDiv).toContainText('Wrong credentials')
+      await expect(errorDiv).toHaveCSS('color','rgb(255, 0, 0)')
+      //await expect(page.locator('.notification')).toContainText('Wrong credentials');
+      const title = page.getByText('Add Nota:')
+      await expect(title).not.toBeVisible()
+     })
   })
+  
+  
+
+    
+  
 
 })  
