@@ -109,7 +109,7 @@ const App = () =>{
           <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
         <div style={showWhenVisible}>
-          <Togglable buttonLabel='login'>
+          <Togglable buttonLabel='log in'>
             <LoginForm
               username={username}
               password={password}
