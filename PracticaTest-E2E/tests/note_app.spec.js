@@ -14,11 +14,11 @@ describe('Note app', () => {
     await page.goto('http://localhost:5173/')
   })
 
-  /*test('front page can be opened', async ({ page }) => {
+  test('front page can be opened', async ({ page }) => {
     const locator = await page.getByText('Registro de Notas:')
     await expect(locator).toBeVisible()
 
-    const note = page.getByText('HTML is easy')
+    const note = page.getByRole('heading', { name: 'Notas:', exact: true })
     await expect(note).toBeVisible()
   })
 
@@ -51,7 +51,7 @@ describe('Note app', () => {
       await page.getByRole('button', { name: 'make no important' }).click()
       await expect(page.getByText('make important')).toBeVisible()
     })
-  })*/
+  })
 
   describe('login fail', () => { 
 
