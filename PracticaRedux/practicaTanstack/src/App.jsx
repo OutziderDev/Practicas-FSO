@@ -1,13 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { useQuery,useMutation } from '@tanstack/react-query'
+import { getNotes, createNotes } from './request'
 
 const App = () => {
+  const newNoteMutation = useMutation({mutationFn: createNotes})
 
   const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
-    event.target.note.value = ''
-    console.log(content)
+    newNoteMutation.mutate({ content, important: true })
   }
 
   const toggleImportance = (note) => {
@@ -16,9 +16,9 @@ const App = () => {
 
   const result = useQuery({
     queryKey: ['notes'],
-    queryFn: () => axios.get('http://localhost:3001/notes').then(res => res.data)
+    queryFn: getNotes
   })
-  console.log(JSON.parse(JSON.stringify(result)))
+  //console.log(JSON.parse(JSON.stringify(result)))
 
   if ( result.isLoading ) {
     return <div>loading data...</div>
