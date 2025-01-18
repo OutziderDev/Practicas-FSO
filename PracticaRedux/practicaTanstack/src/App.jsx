@@ -1,17 +1,30 @@
-import { useQuery,useMutation } from '@tanstack/react-query'
-import { getNotes, createNotes } from './request'
+import { useQuery,useMutation,useQueryClient } from '@tanstack/react-query'
+import { getNotes, createNotes, updateNote } from './request'
 
 const App = () => {
-  const newNoteMutation = useMutation({mutationFn: createNotes})
+  const queryClient = useQueryClient()
+  const newNoteMutation = useMutation({
+    mutationFn: createNotes,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['notes']})
+    }
+  })
+  const updateNoteMutation = useMutation({
+    mutationFn: updateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['notes']})
+    }
+  })
 
   const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     newNoteMutation.mutate({ content, important: true })
+    event.target.note.value = ''
   }
 
   const toggleImportance = (note) => {
-    console.log('toggle importance of', note.id)
+    updateNoteMutation.mutate({...note,important: !note.important})
   }
 
   const result = useQuery({
