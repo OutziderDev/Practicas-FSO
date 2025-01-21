@@ -1,4 +1,5 @@
 import { useCounterDispatch } from '../CounterContext'
+import ProTypes from 'prop-types'
 
 const Button = ({ type, label }) => {
   const dispatch = useCounterDispatch()
@@ -10,3 +11,8 @@ const Button = ({ type, label }) => {
 }
 
 export default Button
+
+Button.propTypes = {
+  type: ProTypes.string.isRequired,
+  label: ProTypes.string.isRequired
+}
