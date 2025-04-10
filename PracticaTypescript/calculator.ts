@@ -19,7 +19,9 @@ const calculator = (a: number, b: number, op: Operation ): number => {
 }
 
 try{
-  console.log( calculator(10,0,'divide'));
+  console.log( calculator(10,1,'divide'));
+  console.log(process.arch);
+  
 } catch (error:unknown) {
   let errorMessage = "something went wrong: "
   if( error instanceof Error ){
