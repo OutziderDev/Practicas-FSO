@@ -1,5 +1,5 @@
 import express from 'express';
-import { calculator } from './calculator';
+import { calculator, Operation } from './calculator';
 const app = express();
 const PORT = 3003
 
@@ -14,7 +14,7 @@ app.get('/calculate', (req, res) => {
     res.status(400).send({ error: '...'});
   }
 
-  const result = calculator(Number(value1),Number(value2),op);
+  const result = calculator(Number(value1),Number(value2),op as Operation );
   res.send({result})
 })
 
