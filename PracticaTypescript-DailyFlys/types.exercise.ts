@@ -52,3 +52,25 @@ const item: Producto = {
   id: 1,
   nombre: "Laptop"
 };
+
+// ejemplo de funciones tipadas
+function sumar(a: number, b: number) { // si se coloca :number, tras la funcion se le indica el retorno pero es implicito 
+  return a + b;
+}
+
+const saludar = (nombre: string): string => `Hola, ${nombre}`;
+
+let operacion: (x: number, y: number) => number;
+operacion = (x, y) => x * y;
+
+
+// ejemplo de tipado en intersecciones
+type Persona = { nombre: string };
+type Empleado = { empresa: string };
+
+type PersonaEmpleado = Persona & Empleado;
+
+const trabajador: PersonaEmpleado = {
+  nombre: "Lucas",
+  empresa: "TechCorp"
+};
