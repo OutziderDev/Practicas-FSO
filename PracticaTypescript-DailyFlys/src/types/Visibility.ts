@@ -1,0 +1,1 @@
+export type Visibility = 'great' | 'good' | 'ok' | 'poor';
