@@ -18,9 +18,13 @@ const getNonSensitiveEntries = () : NonSensitiveDiaryEntry[] => {
 
 }
 
+const findById = (id: number): DairyEntry | undefined => {
+  return diaries.find(diary => diary.id === id)
+}
+
 const addEntry = ()  => {
   return null
 }
 
-export default { getAllEntries, getNonSensitiveEntries, addEntry}
+export default { getAllEntries, getNonSensitiveEntries, addEntry, findById}
 
