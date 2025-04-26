@@ -1,5 +1,5 @@
-import { Visibility } from "./Visibility";
-import { Weather } from "./Weather";
+import { Visibility } from "./VisibilityType";
+import { Weather } from "./WeatherType";
 
 export type DairyEntry = {
   id: number;

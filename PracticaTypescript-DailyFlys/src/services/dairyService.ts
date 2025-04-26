@@ -1,15 +1,26 @@
-import dairyData from '../../data/entries.json';
-import { DairyEntry } from '../types/DairyEntry';
+import { NonSensitiveDiaryEntry } from '../types/NonSensitiveDiaryEntry ';
+import { DairyEntry } from '../types/DairyEntryType';
+import diaries from '../../data/entries';
 
-const diaries : DairyEntry[] = dairyData as DairyEntry[];
-
-const getAll = () => {
+const getAllEntries = () : DairyEntry[] => {
   return diaries
 }
 
-const addEntry = () => {
+const getNonSensitiveEntries = () : NonSensitiveDiaryEntry[] => {
+  return diaries.map(({ id, date, weather, visibility }) => (
+     {
+      id,
+      date,
+      weather,
+      visibility
+    }
+  ))
+
+}
+
+const addEntry = ()  => {
   return null
 }
 
-export default { getAll, addEntry}
+export default { getAllEntries, getNonSensitiveEntries, addEntry}
 

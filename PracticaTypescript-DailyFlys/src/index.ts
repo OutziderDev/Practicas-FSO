@@ -1,5 +1,5 @@
 import express from 'express';
-import diaryRouter from './routes/diaries';
+import diaryRouter from './routes/diariesRoute';
 
 const PORT = 3000;
 const app = express();

@@ -1,6 +1,6 @@
 import express from 'express';
-/* import data from '../../diaryentries.json'
- */
+import dairyService from '../services/dairyService';
+
 const router = express.Router()
 
 router.get('/ping', (_req, res) => {
@@ -10,7 +10,7 @@ router.get('/ping', (_req, res) => {
 
 router.get( '/', (_req, res)  => {
   console.log('fetching all diaries');
-  res.send('fetching all')
+  res.send(dairyService.getAllEntries())
 }) 
 
 router.post('/', (req, res) => {
