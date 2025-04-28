@@ -1,5 +1,6 @@
 import express from 'express';
 import dairyService from '../services/dairyService';
+import { toNewDiaryEntry } from '../utils/toNewDiaryEntry';
 
 const router = express.Router()
 
@@ -22,8 +23,18 @@ router.get('/:id', (req, res) => {
 
 
 router.post('/', (req, res) => {
-  console.log('adding a diary', req.body);
-  res.send('adding a diary')
+  try {
+    const newDairyEntry = toNewDiaryEntry(req.body);
+    const addedEntry = dairyService.addEntry( newDairyEntry);
+    res.send(addedEntry)
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error:'+ error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
+  
 });
 
 export default router

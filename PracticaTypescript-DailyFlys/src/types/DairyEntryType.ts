@@ -8,3 +8,5 @@ export type DairyEntry = {
   visibility: Visibility;
   comment?: string;
 }
+
+export type NewDiaryEntry = Omit<DairyEntry, 'id'>;
