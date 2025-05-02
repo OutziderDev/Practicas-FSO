@@ -9,7 +9,7 @@ router.get('/ping', (_req, res) => {
 });
 
 router.get( '/', (_req, res)  => {
-  res.send(dairyService.getNonSensitiveEntries())
+  res.send(dairyService.getAllEntries())
 }); 
 
 router.get('/:id', (req, res) => {  
